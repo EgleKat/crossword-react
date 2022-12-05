@@ -1,5 +1,6 @@
 import logo from './logo.svg';
 import './App.css';
+import Crossword from './Crossword.tsx';
 
 function App() {
   return (
@@ -7,7 +8,7 @@ function App() {
       <header className="App-header">
         <img src={logo} className="App-logo" alt="logo" />
         <p>
-          Edit <code>src/App.js</code> and save to reload.
+          <Crossword name={"Bob"} />
         </p>
         <a
           className="App-link"
