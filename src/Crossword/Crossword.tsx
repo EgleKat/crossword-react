@@ -95,6 +95,10 @@ export default function Crossword({ name, size }: CrosswordProps) {
                   goLeft={() => dispatch({ type: "goLeft" })}
                   goRight={() => dispatch({ type: "goRight" })}
                   key={sx + sy}
+                  isActive={
+                    crosswordValues.activeTile[0] === sx &&
+                    crosswordValues.activeTile[1] === sy
+                  }
                 />
               );
             })}

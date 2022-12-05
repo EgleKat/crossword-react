@@ -26,10 +26,10 @@ export default function CrosswordTile({
     setValue(newValue);
   };
 
-  const isActiveClass = isActive ? " crossword-tile--active" : "";
+  const isActiveClass = isActive ? styles["crossword-tile--active"] : "";
   return (
     <input
-      className={styles["crossword-tile"] + isActiveClass}
+      className={`${styles["crossword-tile"]} ${isActiveClass}`}
       type="text"
       onChange={handleChange}
       onKeyUp={(e) => {
