@@ -1,0 +1,16 @@
+.crossword-container {
+  width: 50rem;
+  height: 50rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  .crossword-container__header {
+    margin: 2rem;
+  }
+
+  .crossword-tiles--horizontal {
+    display: flex;
+    flex-direction: row;
+  }
+}
