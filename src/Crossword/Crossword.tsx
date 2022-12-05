@@ -76,10 +76,10 @@ export default function Crossword({ name, size }: CrosswordProps) {
         This is crossword {name}
       </h1>
 
-      {sizeArray.map((sx) => {
+      {sizeArray.map((sy) => {
         return (
-          <div key={sx} className={styles["crossword-tiles--horizontal"]}>
-            {sizeArray.map((sy) => {
+          <div key={sy} className={styles["crossword-tiles--horizontal"]}>
+            {sizeArray.map((sx) => {
               const setValue = (value: string) =>
                 dispatch({
                   type: "setValue",
