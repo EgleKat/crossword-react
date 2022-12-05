@@ -1,7 +1,10 @@
-
 .crossword-tile {
   font-size: 2rem;
   text-align: center;
   width: 2rem;
   height: 2rem;
+}
+
+.crossword-tile--active {
+  background-color: green;
 }

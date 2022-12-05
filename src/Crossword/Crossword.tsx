@@ -11,12 +11,36 @@ interface setValueFunc {
   (value: string): null;
 }
 
-function crosswordValueReducer(state: any, action: any) {
+function crosswordReducer(state: any, action: any) {
+  const [activeValueX, activeValueY] = state.activeTile;
   switch (action.type) {
     case "setValue":
       const [posX, posY] = action.payload.place;
       console.log(posX, posY);
-      return [...state, (state[posX][posY] = action.payload.value)];
+      return {
+        ...state,
+        values: [
+          ...state.values,
+          (state.values[posX][posY] = action.payload.value),
+        ],
+      };
+    case "goLeft": {
+      const newX = activeValueX - 1 >= 0 ? activeValueX - 1 : activeValueX;
+      return {
+        ...state,
+        activeTile: [newX, activeValueY],
+      };
+    }
+    case "goRight": {
+      const newX =
+        activeValueX + 1 <= state.size ? activeValueX + 1 : activeValueX;
+      return {
+        ...state,
+        activeTile: [newX, activeValueY],
+      };
+    }
+    case "size":
+      return { ...state, size: action.payload.size };
     default:
       throw new Error();
   }
@@ -29,19 +53,23 @@ function crosswordValueReducer(state: any, action: any) {
  */
 function initialiseEmptyState(size: number) {
   const sizeArray = Array.from(Array(size).keys());
-  return sizeArray.map((sx) => {
-    return sizeArray.map((sy) => "");
-  });
+  const state = {
+    values: sizeArray.map((sx) => {
+      return sizeArray.map((sy) => "");
+    }),
+    activeTile: [0, 0],
+    size,
+  };
+  return state;
 }
 
 export default function Crossword({ name, size }: CrosswordProps) {
   const sizeArray = Array.from(Array(size).keys());
   const [crosswordValues, dispatch] = useReducer(
-    crosswordValueReducer,
+    crosswordReducer,
     initialiseEmptyState(size)
   );
   console.log(crosswordValues);
-  const [activeTile, setActiveTile] = useState([0, 0]);
   return (
     <div className={styles["crossword-container"]}>
       <h1 className={styles["crossword-container__header"]}>
@@ -62,8 +90,10 @@ export default function Crossword({ name, size }: CrosswordProps) {
                 });
               return (
                 <CrosswordTile
-                  value={crosswordValues[sx][sy]}
+                  value={crosswordValues.values[sx]?.[sy] || ""}
                   setValue={setValue}
+                  goLeft={() => dispatch({ type: "goLeft" })}
+                  goRight={() => dispatch({ type: "goRight" })}
                   key={sx + sy}
                 />
               );
