@@ -1,6 +1,6 @@
 import { useReducer, useState } from "react";
 import styles from "./Crossword.module.scss";
-import CrosswordTile from "./CrosswordTile.tsx";
+import CrosswordTile from "./CrosswordTile";
 
 type CrosswordProps = {
   name: string;
