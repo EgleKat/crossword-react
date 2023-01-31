@@ -6,7 +6,7 @@ function App() {
   return (
     <div className="App">
       <header className="App-header">
-        <Crossword name={"Bob"} size={6} />
+        <Crossword name={"Bob"} sizeY={8} sizeX={9} />
       </header>
     </div>
   );

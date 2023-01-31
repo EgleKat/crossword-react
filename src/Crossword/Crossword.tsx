@@ -4,7 +4,8 @@ import CrosswordTile from "./CrosswordTile";
 
 type CrosswordProps = {
   name: string;
-  size: number;
+  sizeX: number;
+  sizeY: number;
 };
 
 interface setValueFunc {
@@ -33,7 +34,7 @@ function crosswordReducer(state: any, action: any) {
     }
     case "goRight": {
       const newX =
-        activeValueX + 1 <= state.size - 1 ? activeValueX + 1 : activeValueX;
+        activeValueX + 1 <= state.sizeX - 1 ? activeValueX + 1 : activeValueX;
       return {
         ...state,
         activeTile: [newX, activeValueY],
@@ -41,8 +42,6 @@ function crosswordReducer(state: any, action: any) {
     }
     case "goUp": {
       const newY = activeValueY - 1 >= 0 ? activeValueY - 1 : activeValueY;
-      console.log("activeY", activeValueY);
-      console.log("newY", newY);
       return {
         ...state,
         activeTile: [activeValueX, newY],
@@ -50,15 +49,16 @@ function crosswordReducer(state: any, action: any) {
     }
     case "goDown": {
       const newY =
-        activeValueY + 1 <= state.size - 1 ? activeValueY + 1 : activeValueY;
-
+        activeValueY + 1 <= state.sizeY - 1 ? activeValueY + 1 : activeValueY;
       return {
         ...state,
         activeTile: [activeValueX, newY],
       };
     }
-    case "size":
-      return { ...state, size: action.payload.size };
+    case "sizeX":
+      return { ...state, size: action.payload.sizeX };
+    case "sizeY":
+      return { ...state, size: action.payload.sizeY };
     default:
       throw new Error();
   }
@@ -69,23 +69,26 @@ function crosswordReducer(state: any, action: any) {
  * @param size size of each array in each row
  * @returns empty string array of certain size
  */
-function initialiseEmptyState(size: number) {
-  const sizeArray = Array.from(Array(size).keys());
+function initialiseEmptyState(sizeX: number, sizeY: number) {
+  const sizeXArray = Array.from(Array(sizeX).keys());
+  const sizeYArray = Array.from(Array(sizeY).keys());
   const state = {
-    values: sizeArray.map((sx) => {
-      return sizeArray.map((sy) => "");
+    values: sizeXArray.map((sx) => {
+      return sizeYArray.map((sy) => "");
     }),
     activeTile: [0, 0],
-    size,
+    sizeX,
+    sizeY,
   };
   return state;
 }
 
-export default function Crossword({ name, size }: CrosswordProps) {
-  const sizeArray = Array.from(Array(size).keys());
+export default function Crossword({ name, sizeX, sizeY }: CrosswordProps) {
+  const sizeXArray = Array.from(Array(sizeX).keys());
+  const sizeYArray = Array.from(Array(sizeY).keys());
   const [crosswordValues, dispatch] = useReducer(
     crosswordReducer,
-    initialiseEmptyState(size)
+    initialiseEmptyState(sizeX, sizeY)
   );
   console.log(crosswordValues.activeTile);
   return (
@@ -94,10 +97,10 @@ export default function Crossword({ name, size }: CrosswordProps) {
         This is crossword {name}
       </h1>
 
-      {sizeArray.map((sy) => {
+      {sizeYArray.map((sy) => {
         return (
           <div key={sy} className={styles["crossword-tiles--horizontal"]}>
-            {sizeArray.map((sx) => {
+            {sizeXArray.map((sx) => {
               const setValue = (value: string) =>
                 dispatch({
                   type: "setValue",
