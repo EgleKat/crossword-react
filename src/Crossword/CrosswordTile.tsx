@@ -24,8 +24,8 @@ export default function CrosswordTile({
   goDown,
 }: CrosswordTileProps) {
   const handleChange = (e: any) => {
-    // Only allowing first letter
-    const newValue = e.target.value[0] || "";
+    // Only using one letter
+    const newValue = e.key[0] || "";
     // setLetter(newValue);
     setValue(newValue);
   };
@@ -40,7 +40,7 @@ export default function CrosswordTile({
       ref={inputRef}
       className={`${styles["crossword-tile"]} ${isActiveClass}`}
       type="text"
-      onChange={handleChange}
+      // onChange={handleChange}
       onKeyUp={(e) => {
         if (e.key === "ArrowLeft") {
           goLeft();
@@ -50,6 +50,8 @@ export default function CrosswordTile({
           goUp();
         } else if (e.key === "ArrowDown") {
           goDown();
+        } else {
+          handleChange(e);
         }
       }}
       value={value}
