@@ -6,10 +6,12 @@ type CrosswordTileProps = {
   value: string;
   goLeft: Function;
   goRight: Function;
+  goUp: Function;
+  goDown: Function;
   isActive: boolean;
 };
 interface setValueFunc {
-  (value: string): null;
+  (value: string): void;
 }
 
 export default function CrosswordTile({
@@ -18,6 +20,8 @@ export default function CrosswordTile({
   goLeft,
   goRight,
   isActive = false,
+  goUp,
+  goDown,
 }: CrosswordTileProps) {
   const handleChange = (e: any) => {
     // Only allowing first letter
@@ -37,6 +41,10 @@ export default function CrosswordTile({
           goLeft();
         } else if (e.key === "ArrowRight") {
           goRight();
+        } else if (e.key === "ArrowUp") {
+          goUp();
+        } else if (e.key === "ArrowDown") {
+          goDown();
         }
       }}
       value={value}

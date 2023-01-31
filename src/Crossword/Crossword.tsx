@@ -33,10 +33,28 @@ function crosswordReducer(state: any, action: any) {
     }
     case "goRight": {
       const newX =
-        activeValueX + 1 <= state.size ? activeValueX + 1 : activeValueX;
+        activeValueX + 1 <= state.size - 1 ? activeValueX + 1 : activeValueX;
       return {
         ...state,
         activeTile: [newX, activeValueY],
+      };
+    }
+    case "goUp": {
+      const newY = activeValueY - 1 >= 0 ? activeValueY - 1 : activeValueY;
+      console.log("activeY", activeValueY);
+      console.log("newY", newY);
+      return {
+        ...state,
+        activeTile: [activeValueX, newY],
+      };
+    }
+    case "goDown": {
+      const newY =
+        activeValueY + 1 <= state.size - 1 ? activeValueY + 1 : activeValueY;
+
+      return {
+        ...state,
+        activeTile: [activeValueX, newY],
       };
     }
     case "size":
@@ -69,7 +87,7 @@ export default function Crossword({ name, size }: CrosswordProps) {
     crosswordReducer,
     initialiseEmptyState(size)
   );
-  console.log(crosswordValues);
+  console.log(crosswordValues.activeTile);
   return (
     <div className={styles["crossword-container"]}>
       <h1 className={styles["crossword-container__header"]}>
@@ -94,6 +112,8 @@ export default function Crossword({ name, size }: CrosswordProps) {
                   setValue={setValue}
                   goLeft={() => dispatch({ type: "goLeft" })}
                   goRight={() => dispatch({ type: "goRight" })}
+                  goUp={() => dispatch({ type: "goUp" })}
+                  goDown={() => dispatch({ type: "goDown" })}
                   key={sx + sy}
                   isActive={
                     crosswordValues.activeTile[0] === sx &&
