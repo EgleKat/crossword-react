@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import styles from "./CrosswordTile.module.scss";
 
 type CrosswordTileProps = {
@@ -29,10 +29,15 @@ export default function CrosswordTile({
     // setLetter(newValue);
     setValue(newValue);
   };
+  const inputRef = useRef<any>(null);
+  useEffect(() => {
+    if (isActive) inputRef?.current?.focus();
+  }, [isActive]);
 
   const isActiveClass = isActive ? styles["crossword-tile--active"] : "";
   return (
     <input
+      ref={inputRef}
       className={`${styles["crossword-tile"]} ${isActiveClass}`}
       type="text"
       onChange={handleChange}
