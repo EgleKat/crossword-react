@@ -1,12 +1,8 @@
 import { useReducer, useState } from "react";
 import styles from "./Crossword.module.scss";
 import CrosswordTile from "./CrosswordTile";
-import {
-  NUMBER_DOWN,
-  NUMBER_RIGHT,
-  EMPTY,
-  BLACK_TILE,
-} from "../crosswordTemplates";
+import { crosswordValues } from "../crosswordTemplates";
+import { NUMBER_DOWN, NUMBER_RIGHT, BLACK_TILE } from "../crosswordTemplates";
 type CrosswordProps = {
   name: string;
   sizeX: number;
@@ -22,12 +18,13 @@ function crosswordReducer(state: any, action: any) {
   const [activeValueX, activeValueY] = state.activeTile;
   switch (action.type) {
     case "setValue":
-      console.log(state.values);
+      const correctValueArray = checkCorrectAnswers(state.values);
       const [posX, posY] = action.payload.place;
       const newValues = [...state.values];
       newValues[posX][posY] = action.payload.value;
       return {
         ...state,
+        correctValueArray,
         values: newValues,
       };
     case "goLeft": {
@@ -91,10 +88,58 @@ function initialiseEmptyState(
     sizeX,
     sizeY,
     crosswordTemplate,
+    correctValueArray: [],
   };
   return state;
 }
 
+function checkCorrectAnswers(values: []) {
+  let correctWordCoords: any = [];
+  // go through each word
+  crosswordValues.forEach((col, y) => {
+    col.forEach((tile, x) => {
+      if (tile === NUMBER_DOWN) {
+        const currentCorrectWordCoords: any = [];
+        for (let i = x + 1; i < col.length; i++) {
+          if (col[i] === values[y][i]) {
+            // all good continue
+            currentCorrectWordCoords.push([i, y]);
+          } else if (col[i] === BLACK_TILE) {
+            // word CORRECT
+            correctWordCoords = [
+              ...correctWordCoords,
+              ...currentCorrectWordCoords,
+            ];
+            break;
+          } else {
+            // word INCORRECT
+            currentCorrectWordCoords.length = 0;
+          }
+        }
+      } else if (tile === NUMBER_RIGHT) {
+        const currentCorrectWordCoords: any = [];
+        for (let i = y + 1; i < crosswordValues.length; i++) {
+          if (crosswordValues[i][x] === values[i][x]) {
+            // all good continue
+            currentCorrectWordCoords.push([x, i]);
+          } else if (crosswordValues[i][x] === BLACK_TILE) {
+            // word CORRECT
+            correctWordCoords = [
+              ...correctWordCoords,
+              ...currentCorrectWordCoords,
+            ];
+            break;
+          } else {
+            // word INCORRECT
+            currentCorrectWordCoords.length = 0;
+          }
+        }
+      }
+    });
+  });
+
+  return correctWordCoords;
+}
 export default function Crossword({
   name,
   sizeX,
@@ -107,7 +152,6 @@ export default function Crossword({
     crosswordReducer,
     initialiseEmptyState(sizeX, sizeY, crosswordTemplate)
   );
-  console.log(crosswordValues.activeTile);
   return (
     <div className={styles["crossword-container"]}>
       <h1 className={styles["crossword-container__header"]}>
@@ -126,7 +170,6 @@ export default function Crossword({
                     place: [sx, sy],
                   },
                 });
-              console.log(crosswordTemplate[sx]?.[sy] === BLACK_TILE);
               return (
                 <CrosswordTile
                   value={crosswordValues.values[sx]?.[sy] || ""}
@@ -144,6 +187,13 @@ export default function Crossword({
                   isActive={
                     crosswordValues.activeTile[0] === sx &&
                     crosswordValues.activeTile[1] === sy
+                  }
+                  isCorrect={
+                    !!crosswordValues.correctValueArray.find(
+                      ([x, y]: [number, number]) => {
+                        return x === sy && y === sx;
+                      }
+                    )
                   }
                 />
               );

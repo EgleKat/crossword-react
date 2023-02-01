@@ -6,10 +6,13 @@
 }
 
 .crossword-tile--active {
-  background-color: green;
+  background-color: yellowgreen;
 }
 .crossword-tile--black {
   background-color: black;
+}
+.crossword-tile--correct {
+  background-color: green;
 }
 .crossword-tile__number {
   background-color: purple;
