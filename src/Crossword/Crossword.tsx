@@ -1,10 +1,16 @@
 import { useReducer, useState } from "react";
 import styles from "./Crossword.module.scss";
 import CrosswordTile from "./CrosswordTile";
-
-const NUMBER_TILE = "number";
-const EMPTY = "";
-const BLACK_TILE = "black";
+import {
+  NUMBER_DOWN,
+  NUMBER_RIGHT,
+  EMPTY,
+  BLACK_TILE,
+} from "../crosswordTemplates";
+// const NUMBER_DOWN = "down";
+// const NUMBER_RIGHT = "right";
+// const EMPTY = "";
+// const BLACK_TILE = "black";
 type CrosswordProps = {
   name: string;
   sizeX: number;
@@ -135,7 +141,10 @@ export default function Crossword({
                   goDown={() => dispatch({ type: "goDown" })}
                   key={sx + sy}
                   isInactive={crosswordTemplate[sx]?.[sy] === BLACK_TILE}
-                  isNumber={crosswordTemplate[sx]?.[sy] === NUMBER_TILE}
+                  isNumber={
+                    crosswordTemplate[sx]?.[sy] === NUMBER_DOWN ||
+                    crosswordTemplate[sx]?.[sy] === NUMBER_RIGHT
+                  }
                   isActive={
                     crosswordValues.activeTile[0] === sx &&
                     crosswordValues.activeTile[1] === sy
