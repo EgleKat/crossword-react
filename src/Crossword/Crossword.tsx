@@ -6,6 +6,7 @@ type CrosswordProps = {
   name: string;
   sizeX: number;
   sizeY: number;
+  crosswordTemplate: [];
 };
 
 interface setValueFunc {
@@ -16,14 +17,13 @@ function crosswordReducer(state: any, action: any) {
   const [activeValueX, activeValueY] = state.activeTile;
   switch (action.type) {
     case "setValue":
+      console.log(state.values);
       const [posX, posY] = action.payload.place;
-      console.log(posX, posY);
+      const newValues = [...state.values];
+      newValues[posX][posY] = action.payload.value;
       return {
         ...state,
-        values: [
-          ...state.values,
-          (state.values[posX][posY] = action.payload.value),
-        ],
+        values: newValues,
       };
     case "goLeft": {
       const newX = activeValueX - 1 >= 0 ? activeValueX - 1 : activeValueX;
@@ -66,10 +66,16 @@ function crosswordReducer(state: any, action: any) {
 
 /**
  * Initializes the crossword array with empty values
- * @param size size of each array in each row
+ * @param sizeX size of each array in each row X
+ * @param sizeY size of each array in each row Y
+ * @param crosswordTemplate template with all the expected values
  * @returns empty string array of certain size
  */
-function initialiseEmptyState(sizeX: number, sizeY: number) {
+function initialiseEmptyState(
+  sizeX: number,
+  sizeY: number,
+  crosswordTemplate: []
+) {
   const sizeXArray = Array.from(Array(sizeX).keys());
   const sizeYArray = Array.from(Array(sizeY).keys());
   const state = {
@@ -79,16 +85,22 @@ function initialiseEmptyState(sizeX: number, sizeY: number) {
     activeTile: [0, 0],
     sizeX,
     sizeY,
+    crosswordTemplate,
   };
   return state;
 }
 
-export default function Crossword({ name, sizeX, sizeY }: CrosswordProps) {
+export default function Crossword({
+  name,
+  sizeX,
+  sizeY,
+  crosswordTemplate,
+}: CrosswordProps) {
   const sizeXArray = Array.from(Array(sizeX).keys());
   const sizeYArray = Array.from(Array(sizeY).keys());
   const [crosswordValues, dispatch] = useReducer(
     crosswordReducer,
-    initialiseEmptyState(sizeX, sizeY)
+    initialiseEmptyState(sizeX, sizeY, crosswordTemplate)
   );
   console.log(crosswordValues.activeTile);
   return (
