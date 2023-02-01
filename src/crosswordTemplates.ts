@@ -13,7 +13,3 @@ export const crosswordValues = [
   [BLACK_TILE, BLACK_TILE, EMPTY, BLACK_TILE, EMPTY, BLACK_TILE, BLACK_TILE, BLACK_TILE], // col 8
   [BLACK_TILE, BLACK_TILE, NUMBER_DOWN, EMPTY, EMPTY, EMPTY, EMPTY, BLACK_TILE], // col 9
 ];
-
-export default {
-  NUMBER_DOWN, NUMBER_RIGHT, EMPTY, BLACK_TILE, crosswordValues
-}

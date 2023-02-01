@@ -7,10 +7,6 @@ import {
   EMPTY,
   BLACK_TILE,
 } from "../crosswordTemplates";
-// const NUMBER_DOWN = "down";
-// const NUMBER_RIGHT = "right";
-// const EMPTY = "";
-// const BLACK_TILE = "black";
 type CrosswordProps = {
   name: string;
   sizeX: number;
