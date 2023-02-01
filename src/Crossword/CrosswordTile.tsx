@@ -9,6 +9,8 @@ type CrosswordTileProps = {
   goUp: Function;
   goDown: Function;
   isActive: boolean;
+  isNumber: boolean;
+  isInactive: boolean;
 };
 interface setValueFunc {
   (value: string): void;
@@ -22,6 +24,8 @@ export default function CrosswordTile({
   isActive = false,
   goUp,
   goDown,
+  isNumber,
+  isInactive,
 }: CrosswordTileProps) {
   const handleChange = (e: any) => {
     // Only using one letter
@@ -35,10 +39,12 @@ export default function CrosswordTile({
   }, [isActive]);
 
   const isActiveClass = isActive ? styles["crossword-tile--active"] : "";
+  const isBlackClass = isInactive ? styles["crossword-tile--black"] : "";
+  const isNumberClass = isNumber ? styles["crossword-tile__number"] : "";
   return (
     <input
       ref={inputRef}
-      className={`${styles["crossword-tile"]} ${isActiveClass}`}
+      className={`${styles["crossword-tile"]} ${isActiveClass} ${isBlackClass} ${isNumberClass}`}
       type="text"
       // onChange={handleChange}
       onKeyUp={(e) => {
